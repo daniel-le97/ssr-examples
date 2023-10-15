@@ -1,0 +1,11 @@
+{
+  "name": "framey",
+  "module": "index.ts",
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "update": "bunx taze -r -w && bun i"
+  }
+}
