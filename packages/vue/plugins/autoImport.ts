@@ -16,8 +16,5 @@ class Importer {
 export default new Importer({
         'addons':{'vueTemplate':true},
         'presets': [ 'vue' ],
-        'dirs': ['./components/*'],
-        'dirsScanOptions': {'filePatterns' : ['*.{tsx,jsx,ts,js,mjs,cjs,mts,cts,vue}' ]}
-        // you can add additional import statements youd like to auto import here
     
     } as UnimportOptions)

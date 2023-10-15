@@ -13,8 +13,10 @@ const BUILD_DIR = path.resolve( PROJECT_ROOT, "build" );
 
 export const build = async (prod = false) => {
     try {
+
         
         consola.info('starting build')
+        const start = performance.now()
 
         const router = new FileSystemRouter( {
             style: 'nextjs',
@@ -71,16 +73,19 @@ export const build = async (prod = false) => {
         const cssBuild = await postcssAPI(
             PROJECT_ROOT + '/assets/app.css',
             PROJECT_ROOT + '/assets/output.css' )
-            await Bun.write('./build/imports.d.ts', generateTypes)
-            await Bun.write('./build/lib.d.ts', declarations)
 
-        consola.success('build finished')
+        await Bun.write('./build/imports.d.ts', generateTypes)
+        await Bun.write('./build/lib.d.ts', declarations)
+
+        const end = performance.now()
+        consola.success('build finished in: ', (end - start).toFixed(2), ' ms')
+        
+    
             // await Bun.write('./build/ssr/main.css.js', `export default ${JSON.stringify(generateCSS)}`)
         } catch (error) {
             console.log(error);
-            
         }
-        };
+    };
         // Note: we are invoking this here so it can be imported and ran directly at the beginning of the file
         // or we can call it from package.json
         await build(true);

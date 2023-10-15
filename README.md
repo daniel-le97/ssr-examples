@@ -1,4 +1,4 @@
-# framey
+# examples on how to build your own framework from scratch!
 
 To install dependencies:
 

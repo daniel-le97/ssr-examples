@@ -3,8 +3,6 @@ import solidLogo from '../assets/logo.svg';
 
 function App () {
   const [ count, setCount ] = createSignal( 0 );
-
-
           return (
             <div class="App">
               {/* <div>one</div> */}
