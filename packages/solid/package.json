@@ -1,0 +1,32 @@
+{
+  "name": "bun-solid-ssr",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "bun dev.ts",
+    "build": "bun build.ts",
+    "serve": "bun build/index.js",
+    "update": "bunx taze major -w && bun install"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.23.2",
+    "@babel/preset-typescript": "^7.23.2",
+    "@types/postcss-import": "^14.0.1",
+    "autoprefixer": "^10.4.16",
+    "babel-preset-solid": "^1.8.0",
+    "bun-types": "latest",
+    "postcss": "^8.4.31",
+    "postcss-import": "^15.1.0",
+    "tailwindcss": "^3.3.3",
+    "solid-js": "^1.8.1",
+    "unimport": "^3.4.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "consola": "^3.2.3",
+    "elysia": "^0.7.16",
+    "typescript": "^5.2.2"
+  }
+}

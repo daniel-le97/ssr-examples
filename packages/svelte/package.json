@@ -1,0 +1,31 @@
+{
+  "name": "bun-svelte-ssr",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "start": "bun ./build/index.js",
+    "build": "bun build.ts",
+    "dev": "bun run dev.ts",
+    "update": "bunx taze major -w && bun install"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.16",
+    "bun-types": "latest",
+    "mdsvex": "^0.11.0",
+    "postcss": "^8.4.31",
+    "postcss-import": "^15.1.0",
+    "svelte-preprocess": "^5.0.4",
+    "tailwindcss": "^3.3.3"
+  },
+  "peerDependencies": {
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "c12": "^1.4.2",
+    "consola": "^3.2.3",
+    "elysia": "^0.7.16",
+    "elysia-autoroutes": "^0.4.0",
+    "svelte": "^4.2.1",
+    "typescript": "^5.2.2"
+  }
+}

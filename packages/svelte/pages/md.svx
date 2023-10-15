@@ -1,0 +1,11 @@
+<script>
+let name = 'World'
+import Counter from '../components/counter.svelte';
+</script>
+
+# Hello {name}!
+
+# What i wrote last week
+
+this is markdown!
+<Counter/>

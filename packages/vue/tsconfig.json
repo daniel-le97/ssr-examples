@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+        "lib": ["ESNext"],
+        "module": "esnext",
+        "target": "esnext",
+        "moduleResolution": "Bundler",
+        "moduleDetection": "force",
+        "allowImportingTsExtensions": true,
+        "noEmit": true,
+        "allowJs": true,
+        // "bun-types" is the important part
+        "types": ["bun-types"]
+    },
+    "include": [
+        ".",
+        "./.build/imports.d.ts"
+    ]
+}
