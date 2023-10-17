@@ -2,11 +2,9 @@ import { Subprocess, spawn } from "bun";
 import { WatchEventType, watch } from "fs";
 import Elysia from "elysia";
 import { Server } from 'bun'
-import { build } from "./build.ts";
 import { buildCache, buildServerCache } from "./plugins/utils/cache.ts";
 import { logger } from "./plugins/utils/logger.ts";
-import config from "./plugins/utils/config.ts";
-
+import { bundler } from "./build.ts";
 
 
 
@@ -15,6 +13,10 @@ let isRestarting = false;
 
 
 const server: { instance: null | Server } = { instance: null }
+process.on('SIGSEGV', (signal) => {
+    logger.error('an error occured please restart dev server')
+    serverProcess?.kill(11)
+})
 
 // we need a seperate server instance because the main one will turn off while reloading
 const app = new Elysia()
@@ -31,7 +33,8 @@ const app = new Elysia()
 })
 
 
-function startServer() {
+async function startServer() {
+    await bundler.build()
     isRestarting = true;
     logger.start( 'Starting server...' );
     serverProcess = spawn( {
@@ -49,7 +52,7 @@ function startServer() {
 }
 
 // Start the server initially
-startServer();
+await startServer();
 
 
 
@@ -78,15 +81,19 @@ const fileWatch = async ( event: WatchEventType, filename: string | Error | unde
         
         logger.info( `Detected ${ event } in ${ filename }` );
         buildCache.forEach( ( value, key ) => {
-            // key.includes(filename)
             if ( key.includes( filename ) )
             {
                 buildCache.set( key, '' );
-                buildServerCache.set( key, '' );
             }
         } );
+        buildServerCache.forEach((value, key) => {
+            if ( key.includes( filename ) )
+            {
+                buildServerCache.set( key, '' );
+            }
+        })
         const start = performance.now()
-        await build( false )
+        await bundler.build()
         const end = performance.now();
         const elapsedMilliseconds = end - start
         logger.info( `rebundled in: ${ elapsedMilliseconds } ms` );

@@ -9,7 +9,7 @@ export const PROJECT_ROOT = process.cwd()
 export const PUBLIC_DIR = path.resolve( PROJECT_ROOT, "public" );
 export const BUILD_DIR = path.resolve( PROJECT_ROOT, "build" );
 export const ASSETS_DIR = path.resolve( PROJECT_ROOT, 'assets' );
-export const port = process.env.PORT ?? 3123
+export const port = process.env.PORT ?? 3124
 
 // add other directories you would like to serve statically here
 export const serveDirectories = [ BUILD_DIR + '/client', ASSETS_DIR];

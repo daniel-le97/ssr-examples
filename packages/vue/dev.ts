@@ -2,9 +2,9 @@ import { Subprocess, spawn } from "bun";
 import { WatchEventType, watch } from "fs";
 import Elysia from "elysia";
 import { Server } from 'bun'
-import { build } from "./build.ts";
 import { buildCache, buildServerCache } from "./plugins/utils/cache.ts";
 import consola from "consola";
+import { bundler } from "./build.ts";
 
 let serverProcess: Subprocess | null = null;
 let isRestarting = false;
@@ -26,7 +26,8 @@ const app = new Elysia()
 })
 
 
-function startServer() {
+async function startServer () {
+    await bundler.build()
     isRestarting = true;
     consola.start( 'Starting server...' );
     serverProcess = spawn( {
@@ -44,7 +45,7 @@ function startServer() {
 }
 
 // Start the server initially
-startServer();
+await startServer();
 
 
 
@@ -88,7 +89,7 @@ const fileWatch = async ( event: WatchEventType, filename: string | Error | unde
         } );
 
         const start = performance.now()
-        await build( false )
+        await bundler.build()
         const end = performance.now();
         const elapsedMilliseconds = end - start
         consola.info( `rebundled in: ${ elapsedMilliseconds } ms` );

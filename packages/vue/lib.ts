@@ -1,7 +1,5 @@
 import * as path from "path";
-import { readdirSync, statSync } from "fs";
-import type { ServeOptions } from "bun";
-import { FileSystemRouter } from "bun";
+import { statSync } from "fs";
 import { buildRouter, srcRouter } from "./plugins/utils/routers.js";
 import { createApp } from "./entry/index.js";
 import { renderToString } from "vue/server-renderer";
@@ -9,7 +7,7 @@ import { renderToString } from "vue/server-renderer";
 
 export const PROJECT_ROOT = process.cwd()
 export const PUBLIC_DIR = path.resolve( PROJECT_ROOT, "public" );
-export const BUILD_DIR = path.resolve( PROJECT_ROOT, ".build" );
+export const BUILD_DIR = path.resolve( PROJECT_ROOT, "build" );
 export const ASSETS_DIR = path.resolve( PROJECT_ROOT, 'assets' );
 export const port = process.env.PORT ?? 3032
 

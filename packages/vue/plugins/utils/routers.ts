@@ -5,7 +5,7 @@ export const srcRouter = new Bun.FileSystemRouter( {
     fileExtensions: [ '.vue' ]
   } );
 export const buildRouter = new Bun.FileSystemRouter( {
-    dir: './.build/client/pages',
+    dir: './build/client/pages',
     style: "nextjs",
   } );
   

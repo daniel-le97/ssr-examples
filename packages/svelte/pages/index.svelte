@@ -7,9 +7,16 @@
   </svelte:head>
   
   <main>
+
     <div class=" space-x-4">
       <a href="/md">mdsvex</a>
       <a href="/test">test</a>
+      <a href="/test">test</a>
+      <a href="/test">test</a>
+
+      
+      
+      
     </div>
     <div class='flex justify-center'>
       <a href="https://bun.sh" target="_blank" rel="noreferrer"> 

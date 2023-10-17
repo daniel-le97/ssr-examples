@@ -11,7 +11,7 @@ export const isProduction = process.env.NODE_ENV === 'production'
 export const PUBLIC_DIR = path.resolve( PROJECT_ROOT, "public" );
 export const BUILD_DIR = path.resolve( PROJECT_ROOT, "build" );
 export const ASSETS_DIR = path.resolve( PROJECT_ROOT, 'assets' );
-export const port = process.env.PORT ?? 3963
+export const port = process.env.PORT ?? 3969
 
 // add other directories you would like to serve statically here
 export const serveDirectories = [ BUILD_DIR + '/client', ASSETS_DIR];

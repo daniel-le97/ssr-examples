@@ -5,7 +5,6 @@ function App () {
   const [ count, setCount ] = createSignal( 0 );
           return (
             <div class="App">
-              {/* <div>one</div> */}
               <div class=' flex border border-x-rose-200'>
                 <a href="https://bun.sh" target="_blank">
                   <img src="./bunlogo.svg" class="logo" alt="Bun logo" />

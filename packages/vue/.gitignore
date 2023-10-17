@@ -15,6 +15,7 @@ assets/output.css
 
 # production
 /.build
+build
 
 # misc
 .DS_Store

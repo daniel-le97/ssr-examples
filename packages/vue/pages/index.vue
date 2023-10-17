@@ -7,6 +7,7 @@
     const increment = () => {
         count.value += 1
     };
+
     const countValue = computed( () => count.value)
 </script>
 

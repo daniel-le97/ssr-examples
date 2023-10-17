@@ -1,114 +1,146 @@
-import { BunPlugin, FileSystemRouter, Target } from "bun";
-import { sveltePlugin } from "./plugins/svelte.ts";
+import { BunPlugin, FileSystemRouter } from "bun";
 import * as path from 'path';
 import { existsSync, rmSync } from "fs";
+import consola from "consola";
 import { html } from "./plugins/html.ts";
 import { postcssAPI } from "./plugins/postcss.ts";
-import { logger } from "./plugins/utils/logger.ts";
+import { sveltePlugin } from "./plugins/svelte.ts";
 
-const isProd = process.env.NODE_ENV === 'production';
-const PROJECT_ROOT = process.cwd();
-const BUILD_DIR = path.resolve( PROJECT_ROOT, "build" );
+interface BundlerConfig {
+  isProd: boolean;
+  projectRoot: string;
+  buildDir: string;
+  clientEntry: string;
+  serverEntry: string;
+  cssEntry: string;
+  cssOutput: string;
+  pagesDir: string;
+  clientPlugins: BunPlugin[];
+  serverPlugins: BunPlugin[];
+  allowedPagesExt: string[]
+}
 
-const declarations = `
+class Bundler {
+  private config: BundlerConfig;
+
+  constructor(config: BundlerConfig) {
+    this.config = config;
+  }
+
+  private async cleanBuildDirectory() {
+    if (existsSync(this.config.buildDir)) {
+      rmSync(path.join(this.config.buildDir, 'client'), { recursive: true, force: true });
+      rmSync(path.join(this.config.buildDir, 'ssr'), { recursive: true, force: true });
+    }
+  }
+
+  private async buildClient() {
+    const router = new FileSystemRouter({
+      style: 'nextjs',
+      dir: this.config.pagesDir,
+      fileExtensions: this.config.allowedPagesExt
+    });
+
+    return await Bun.build({
+      entrypoints: [this.config.clientEntry, ...Object.values(router.routes)],
+      splitting: true,
+      target: 'browser',
+      outdir: path.join(this.config.buildDir, 'client'),
+      minify: this.config.isProd,
+      plugins: this.config.clientPlugins,
+    });
+  }
+
+  private async buildServer() {
+    const router = new FileSystemRouter({
+      style: 'nextjs',
+      dir: this.config.pagesDir,
+      fileExtensions: this.config.allowedPagesExt
+    });
+
+    return await Bun.build({
+      entrypoints: [this.config.serverEntry, ...Object.values(router.routes)],
+      splitting: true,
+      target: 'bun',
+      minify: this.config.isProd,
+      outdir: path.join(this.config.buildDir, 'ssr'),
+      plugins: this.config.serverPlugins,
+    });
+  }
+
+  private async buildProd() {
+    const prodBuild = await Bun.build({
+      entrypoints: ['./index.ts'],
+      splitting: false,
+      target: 'bun',
+      minify: false,
+      outdir: this.config.buildDir,
+      plugins: this.config.serverPlugins,
+    });
+  }
+
+  private async generateDeclarations() {
+    const declarations = `
 /// <reference lib='dom'/>
 /// <reference lib='dom.iterable'/>\n
-        declare module '*.html' {
-            const content: string;
-            export default content;
-        }\n
-        declare module '*.svg' {
-            const content: string;
-            export default content;
-        }`
+      declare module '*.html' {
+          const content: string;
+          export default content;
+      }\n
+      declare module '*.svg' {
+          const content: string;
+          export default content;
+      }`;
 
-let hasbuilt = false
+    await Bun.write(path.join(this.config.buildDir, 'lib.d.ts'), declarations);
+  }
 
-export const build = async (prod = false) => {
+ private async generateCSS(){
+    await postcssAPI(this.config.cssEntry, this.config.cssOutput)
+  }
+
+  public async build() {
     try {
-        
-        // const start = performance.now();
-        if ( hasbuilt === true )
-        {
-            return;
-        }
-        // hasbuilt = true
-        
-        logger.info('rebuilding bundle..');
-        
-        
-        
-        const router = new FileSystemRouter( {
-            style: 'nextjs',
-            dir: './pages',
-            fileExtensions: ['.svelte', '.svx']
-        } );
-        
-        // 
-        if ( existsSync( BUILD_DIR ) )
-        {
-            // clear the necessary directories for our rebuild that follows
-            rmSync( BUILD_DIR + '/client', { recursive: true, force: true } );
-            rmSync( BUILD_DIR + '/ssr', { recursive: true, force: true } );
-        }
-        
-        // our postcss/tailwind build step
-        const cssBuild = await postcssAPI(
-            PROJECT_ROOT + '/assets/app.css',
-            PROJECT_ROOT + '/assets/output.css' )
-            
-            // builds the files our client will be fetching
-            const clientBuild = await Bun.build( {
-                entrypoints: [ import.meta.dir + '/entry/entry-client.ts', ...Object.values( router.routes ) ],
-                splitting: true,
-                target: 'browser',
-                outdir: './build/client',
-                minify: isProd,
-                plugins: [ sveltePlugin({ssr:true})],
-            } );
-            
-            // builds the files our server will be using
-            const serverBuild = await Bun.build( {
-                entrypoints: [import.meta.dir + '/entry/entry-server.ts',...Object.values( router.routes ),],
-                splitting: true,
-                target: 'bun',
-                minify: isProd,
-                outdir: './build/ssr',
-                plugins: [sveltePlugin({ssr: true})],
-            } );
-            if (serverBuild.success && clientBuild.success) {
-                hasbuilt = true
-            }
-            
-            // build these files only once
-            if (isProd || prod) {
-                const prodBuild = await Bun.build( {
-                    'entrypoints': ['./index.ts'],
-                    'splitting': false,
-                    target: 'bun',
-                    minify: prod,
-                    outdir: './build',
-                    plugins: [html]
-                } );
-                await Bun.write('./build/lib.d.ts', declarations) 
-            }
-            
-            if (!isProd) {
-                const rebuilt = clientBuild.success && serverBuild.success
-                const status = (type : 'successfull' | 'unsuccessfull') =>  `rebuild ${type}: ${rebuilt}`
-                rebuilt ? logger.success(status('successfull')) : logger.error(status('unsuccessfull'))
-                
-            }
-            hasbuilt = false;
-            return {clientBuild, serverBuild}
-            
-        } catch (error) {
-            logger.error(error)
-            // error handling needs to be done here
-        }
-        };
-        
-        // Note: we are invoking this here so it can be imported and ran directly at the beginning of the file
-        // or we can call it from package.json
-        ( await build( true ) );
-        
+      consola.info('starting build');
+      const start = performance.now();
+
+      await this.cleanBuildDirectory();
+     const client =  await this.buildClient();
+     const server =  await this.buildServer();
+
+      
+        await this.buildProd();
+      
+
+      await this.generateDeclarations();
+      await this.generateCSS()
+
+      const end = performance.now();
+      consola.success('build finished in: ', (end - start).toFixed(2), ' ms');
+    } catch (error) {
+      console.log(error);
+    }
+  }
+}
+
+// Usage
+const config: BundlerConfig = {
+  isProd: process.env.NODE_ENV === 'production',
+  projectRoot: process.cwd(),
+  allowedPagesExt: ['.svelte', '.svx'],
+  buildDir: path.resolve(process.cwd(), "build"),
+  clientEntry: path.join(process.cwd(), 'entry/entry-client.ts'),
+  serverEntry: path.join(process.cwd(), 'entry/entry-server.ts'),
+  cssEntry: path.join(process.cwd(), 'assets/app.css'),
+  cssOutput: path.join(process.cwd(), 'assets/output.css'),
+  pagesDir: './pages', // Replace with your pages directory path
+  clientPlugins: [sveltePlugin({ssr:true})], // Add your client-specific plugins
+  serverPlugins: [sveltePlugin({ssr:true}), html], // Add your server-specific plugins
+};
+
+export const bundler = new Bundler(config);
+
+if (import.meta.path === Bun.main) {
+    // this script is being directly executed
+    bundler.build();
+}

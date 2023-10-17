@@ -2,18 +2,12 @@
 import { transformAsync, TransformOptions } from '@babel/core';
 // @ts-ignore
 import ts from '@babel/preset-typescript';
-import autoprefixer from 'autoprefixer';
 // @ts-ignore
 import solid from 'babel-preset-solid';
 import type { BunPlugin } from 'bun';
-import postcss from 'postcss';
 import { UnimportOptions } from "unimport";
 // @ts-ignore
-import tailwindcssNested from  'tailwindcss/nesting';
-import tailwindcss from 'tailwindcss'
 // @ts-ignore
-import postcss_import from 'postcss-import'
-import { transpileTS } from './html.ts';
 import { buildCache, buildServerCache } from './utils/cache.ts';
 
 export let generateTypes: string;
