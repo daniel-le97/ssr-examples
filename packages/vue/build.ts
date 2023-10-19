@@ -118,9 +118,12 @@ class Bundler {
       await this.generateCSS()
 
       const end = performance.now();
+      
+      
+
       consola.success('build finished in: ', (end - start).toFixed(2), ' ms');
     } catch (error) {
-      console.log(error);
+      consola.error('ERROR in build:', error);
     }
   }
 }

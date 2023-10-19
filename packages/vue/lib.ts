@@ -76,6 +76,11 @@ export function serveFromDir (
   
   
         // send the finalized html  
+        console.log('sending html');
+        
+
+
+        
         return new Response( html, {
           headers: { "Content-Type": "text/html;charset=utf-8" },
         } );

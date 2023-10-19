@@ -10,7 +10,6 @@ let serverProcess: Subprocess | null = null;
 let isRestarting = false;
 const server: { instance: null | Server } = { instance: null }
 
-process.on('SIGSEGV', () => serverProcess? serverProcess.kill() : '')
 // we need a seperate server instance because the main one will turn off while reloading
 const app = new Elysia()
 .ws('/ws', {
@@ -88,11 +87,11 @@ const fileWatch = async ( event: WatchEventType, filename: string | Error | unde
             }
         } );
 
-        const start = performance.now()
+        // const start = performance.now()
         await bundler.build()
-        const end = performance.now();
-        const elapsedMilliseconds = end - start
-        consola.info( `rebundled in: ${ elapsedMilliseconds } ms` );
+        // const end = performance.now();
+        // const elapsedMilliseconds = end - start
+        // consola.info( `rebundled in: ${ elapsedMilliseconds } ms` );
         
         isRestarting = false;
         // console.log('refreshed in ', (end - start) / 1000000);

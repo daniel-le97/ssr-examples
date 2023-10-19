@@ -24,6 +24,13 @@ export const postcssAPI = async(path: string, out: string) => {
         syntax: postcss_scss
         
     })
+
+    console.log('running');
+    if(results.css.includes('bg-black')){
+        console.log(results.css);
+        
+    }
+    
     return await Bun.write(out, results.css)
 }
 

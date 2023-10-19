@@ -13,14 +13,14 @@
 
 <template>
     <div>
-        <button @click="increment" class=" bg-green-500 text-black">Increment</button>
+        <button @click="increment" class="  text-black bg-blue-300">Increment</button>
         <h3>{{ countValue }}</h3>
         <li v-for="route in routes">
             <a :href="route">{{ route }}</a>
         </li>
         <hello-world/>
         <footer class="bg-dark text-light">
-             Made with 💖 by daniel
+             Made with 💖 by daniel 
         </footer>
     </div>
 </template>
@@ -29,6 +29,8 @@
 body {
     margin: 0;
     padding: 0;
+    justify-content: center;
+    display: flex;
 }
 
 * {
