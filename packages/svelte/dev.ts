@@ -13,10 +13,10 @@ let isRestarting = false;
 
 
 const server: { instance: null | Server } = { instance: null }
-process.on('SIGSEGV', (signal) => {
-    logger.error('an error occured please restart dev server')
-    serverProcess?.kill(11)
-})
+// process.on('SIGSEGV', (signal) => {
+//     logger.error('an error occured please restart dev server')
+//     serverProcess?.kill(11)
+// })
 
 // we need a seperate server instance because the main one will turn off while reloading
 const app = new Elysia()

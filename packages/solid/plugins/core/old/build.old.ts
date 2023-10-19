@@ -1,9 +1,9 @@
 import { BunPlugin, FileSystemRouter, Target } from "bun";
-import { generateTypes, solidPlugin } from "../solid.ts";
+import { generateTypes, solidPlugin } from "../../solid.ts";
 import * as path from 'path';
 import { existsSync, rmSync } from "fs";
-import { html } from "../html.ts";
-import { postcssAPI } from "../postcss.ts";
+import { html } from "../../html.ts";
+import { postcssAPI } from "../../postcss.ts";
 import consola from "consola";
 // import { BUILD_DIR} from './lib.ts'
 

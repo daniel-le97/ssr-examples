@@ -3,7 +3,7 @@ import { readdirSync, statSync } from "fs";
 import type { ServeOptions } from "bun";
 import { FileSystemRouter } from "bun";
 import  htmlContent from './index.html'
-import { clientRouter, serverRouter } from "./plugins/utils/routers.ts";
+import { clientRouter, serverRouter } from "./plugins/core/routers.ts";
 
 export const PROJECT_ROOT = process.cwd()
 export const PUBLIC_DIR = path.resolve( PROJECT_ROOT, "public" );

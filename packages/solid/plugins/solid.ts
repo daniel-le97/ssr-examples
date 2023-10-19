@@ -8,7 +8,7 @@ import type { BunPlugin } from 'bun';
 import { UnimportOptions } from "unimport";
 // @ts-ignore
 // @ts-ignore
-import { buildCache, buildServerCache } from './utils/cache.ts';
+import { buildCache, buildServerCache } from './core/cache.ts';
 
 export let generateTypes: string;
 

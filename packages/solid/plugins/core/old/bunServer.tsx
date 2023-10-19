@@ -3,7 +3,7 @@ import { statSync } from "fs";
 import type { ServeOptions } from "bun";
 import { FileSystemRouter } from "bun";
 import  htmlContent from './index.html'
-import { BUILD_DIR, serveDirectories, port, serveFromRouter, serveFromDir} from '../../lib.ts'
+import { BUILD_DIR, serveDirectories, port, serveFromRouter, serveFromDir} from '../../../lib.ts'
 // import { serveApiRoutes } from "./plugins/elysia/router.ts";
 
 

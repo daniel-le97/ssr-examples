@@ -3,7 +3,7 @@ import { WatchEventType, watch } from "fs";
 import Elysia from "elysia";
 import { Server } from 'bun'
 // import { build } from "./build.ts";
-import { buildCache, buildServerCache } from "./plugins/utils/cache.ts";
+import { buildCache, buildServerCache } from "./plugins/core/cache.ts";
 import consola from "consola";
 import { bundler } from "./build.ts";
 

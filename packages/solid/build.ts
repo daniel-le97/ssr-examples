@@ -137,7 +137,7 @@ const config: BundlerConfig = {
 
 export const bundler = new Bundler(config);
 if (import.meta.path === Bun.main) {
-  // this script is being directly executed
+  // if this script is being directly executed do this
   bundler.build();
 }
 
